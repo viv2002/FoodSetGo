@@ -19,20 +19,19 @@
         android:orientation="horizontal">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="110dp"
+            android:layout_width="140dp"
             android:layout_height="110dp"
             android:layout_marginTop="5dp"
             app:cardCornerRadius="6dp"
             android:layout_marginBottom="5dp"
             >
             <ImageView
-                android:layout_width="110dp"
+                android:layout_width="140dp"
                 android:src="@drawable/main_image"
-                android:scaleType="centerCrop"
+                android:scaleType="fitXY"
                 android:layout_height="110dp"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/cartImage"
-
                 />
         </androidx.cardview.widget.CardView>
 
@@ -45,7 +44,7 @@
                 android:layout_width="160dp"
                 android:layout_height="match_parent"
                 android:text="FoodName"
-                android:textSize="30sp"
+                android:textSize="18sp"
                 android:id="@+id/cart_food_name"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
@@ -54,7 +53,7 @@
                 android:layout_width="160dp"
                 android:layout_height="match_parent"
                 android:text="Count:"
-                android:textSize="30sp"
+                android:textSize="18sp"
                 android:id="@+id/count_food"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"

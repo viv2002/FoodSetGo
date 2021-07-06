@@ -6,46 +6,42 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="6dp"
+    app:cardCornerRadius="15dp"
     app:cardElevation="6dp"
     android:id="@+id/Rest_cards"
 
     >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:orientation="horizontal">
-
         <androidx.cardview.widget.CardView
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
             android:layout_marginTop="5dp"
-            app:cardCornerRadius="6dp"
+            app:cardCornerRadius="15dp"
             android:layout_marginBottom="5dp"
             >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
             <ImageView
-                android:layout_width="110dp"
+                android:layout_width="match_parent"
                 android:src="@drawable/main_image"
-                android:scaleType="centerCrop"
-                android:layout_height="110dp"
-                android:layout_marginBottom="5dp"
+                android:scaleType="fitXY"
+                android:layout_height="200dp"
                 android:id="@+id/RestImage"
-
                 />
-        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="RestNme"
-            android:textSize="30sp"
-            android:id="@+id/RestName"
-            android:layout_marginLeft="10dp"
-            />
-    </LinearLayout>
+            <TextView
+                android:id="@+id/RestName"
+                android:layout_width="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_height="55dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="RestNme"
+                android:textSize="20sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
 
 </androidx.cardview.widget.CardView>

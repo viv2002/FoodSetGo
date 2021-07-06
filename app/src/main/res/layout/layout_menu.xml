@@ -6,66 +6,72 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="6dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="6dp"
     android:id="@+id/Menu_cards"
     >
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="160dp"
         android:layout_marginRight="5dp"
-        android:layout_marginLeft="5dp"
-        android:orientation="horizontal">
+        android:layout_marginLeft="5dp">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:layout_marginTop="5dp"
-            app:cardCornerRadius="6dp"
-            android:layout_marginBottom="5dp"
-            >
-            <ImageView
-                android:layout_width="110dp"
-                android:src="@drawable/main_image"
-                android:scaleType="centerCrop"
-                android:layout_height="110dp"
-                android:layout_marginBottom="5dp"
-                android:id="@+id/FoodImage_menu"
-
-                />
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/FoodName_menu"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="FoodName"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="FoodName"
-                android:textSize="30sp"
-                android:id="@+id/FoodName_menu"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                />
+                android:layout_toRightOf="@+id/FoodName_menu"
+                android:orientation="vertical">
 
-            <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:id="@+id/number_picker" android:alpha="0.8"
-                app:textColor="#fff"
-                app:textSize="15dp"
-                android:layout_weight="1"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="120dp"
-                android:layout_marginTop="10dp"
-                app:initialNumber="0"
-                app:finalNumber="9"
-                />
+                <ImageView
+                    android:id="@+id/FoodImage_menu"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="5dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/main_image" />
 
-        </LinearLayout>
-    </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+                        android:id="@+id/number_picker"
+                        android:layout_width="100dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="false"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_weight="1"
+                        android:alpha="0.8"
+                        android:background="#FFFFFF"
+                        app:backGroundColor="#FDF102"
+                        app:backgroundDrawable="@drawable/edittext_round"
+                        app:finalNumber="9"
+                        app:initialNumber="0"
+                        app:textColor="#0623F6"
+                        app:textSize="10sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+    </RelativeLayout>
 
 
 </androidx.cardview.widget.CardView>
