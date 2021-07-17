@@ -54,11 +54,20 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/log_out"
+        android:layout_above="@id/MakePayment"
         android:layout_centerHorizontal="true"
         android:text="Edit Details"
         android:layout_marginBottom="8dp"
         android:id="@+id/EditProfile"
+        />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/log_out"
+        android:layout_centerHorizontal="true"
+        android:text="FoodSet Payments"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/MakePayment"
         />
     <Button
         android:layout_width="match_parent"

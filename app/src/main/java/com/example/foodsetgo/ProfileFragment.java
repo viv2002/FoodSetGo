@@ -30,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileFragment extends Fragment {
     GoogleSignInClient mGoogleSignInClient;
     Button sign_out;
+    Button payment;
     Button change_pwd;
     Button Edit;
     TextView nameTV;
@@ -44,6 +45,7 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState){
         Viewroot=inflater.inflate(R.layout.fragment_profile, container, false);
         sign_out = Viewroot.findViewById(R.id.log_out);
+        payment = Viewroot.findViewById(R.id.MakePayment);
         nameTV = Viewroot.findViewById(R.id.name);
         emailTV = Viewroot.findViewById(R.id.email);
         contactTV=Viewroot.findViewById(R.id.contact);
@@ -109,6 +111,14 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 signOut();
+            }
+        });
+
+        payment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i =new Intent(getContext(),Payment.class);
+                startActivity(i);
             }
         });
 

@@ -1,83 +1,200 @@
 package com.example.foodsetgo;
+import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.Toast;
+import com.example.foodsetgo.R;
+import com.shreyaspatil.EasyUpiPayment.EasyUpiPayment;
+import com.shreyaspatil.EasyUpiPayment.model.PaymentApp;
+import com.shreyaspatil.EasyUpiPayment.model.TransactionDetails;
+import com.shreyaspatil.EasyUpiPayment.listener.PaymentStatusListener;
 
-import com.paytm.pgsdk.PaytmPaymentTransactionCallback;
-import com.paytm.pgsdk.TransactionManager;
 
-public class Payment extends AppCompatActivity {
+public class Payment extends AppCompatActivity implements PaymentStatusListener {
 
-    private int ActivityRequestCode = 1;
+    private ImageView imageView;
+
+    private TextView statusView;
+
+    private Button payButton;
+    private  Button homeButton;
+
+    private RadioGroup radioAppChoice;
+
+    private EditText fieldPayeeVpa;
+    private EditText fieldPayeeName;
+    private EditText fieldPayeeMerchantCode;
+    private EditText fieldTransactionId;
+    private EditText fieldTransactionRefId;
+    private EditText fieldDescription;
+    private EditText fieldAmount;
+
+    private EasyUpiPayment easyUpiPayment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        Bundle bundle = getIntent().getExtras();
-        String orderid = bundle.getString("orderid");
-        String mid = bundle.getString("mid");
-        String txnToken = bundle.getString("txnToken");
-        String amount = bundle.getString("amount");
-        String callbackurl = bundle.getString("callbackurl");
+        initViews();
 
-        PaytmOrder paytmOrder = new PaytmOrder(orderid, mid, txnToken, amount, callbackurl);
-
-        TransactionManager transactionManager = new TransactionManager(paytmOrder, new PaytmPaymentTransactionCallback() {
+        payButton.setOnClickListener(v -> pay());
+        homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onTransactionResponse(Bundle bundle) {
-                Toast.makeText(getApplicationContext(), "Payment Transaction response " + bundle.toString(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void networkNotAvailable() {
-                Toast.makeText(getApplicationContext(), "Network not available", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onErrorProceed(String s) {
-                Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void clientAuthenticationFailed(String s) {
-                Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void someUIErrorOccurred(String s) {
-                Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onErrorLoadingWebPage(int i, String s, String s1) {
-                Toast.makeText(getApplicationContext(), "Error occurred", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onBackPressedCancelTransaction() {
-                Toast.makeText(getApplicationContext(), "Transaction cancelled", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onTransactionCancel(String s, Bundle bundle) {
-                Toast.makeText(getApplicationContext(), "Transaction cancelled", Toast.LENGTH_LONG).show();
+            public void onClick(View view) {
+                Intent i = new Intent(Payment.this,UserHome.class);
+                startActivity(i);
             }
         });
-        int requestCode = 1;
-        transactionManager.startTransaction(this,requestCode);
-
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ActivityRequestCode && data != null) {
-            Toast.makeText(this, data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"), Toast.LENGTH_SHORT).show();
+    private void initViews() {
+        imageView = findViewById(R.id.imageView);
+        statusView = findViewById(R.id.textView_status);
+        payButton = findViewById(R.id.button_pay);
+        homeButton = findViewById(R.id.user_home);
+
+        fieldPayeeVpa = findViewById(R.id.field_vpa);
+        fieldPayeeName = findViewById(R.id.field_name);
+        fieldPayeeMerchantCode = findViewById(R.id.field_payee_merchant_code);
+        fieldTransactionId = findViewById(R.id.field_transaction_id);
+        fieldTransactionRefId = findViewById(R.id.field_transaction_ref_id);
+        fieldDescription = findViewById(R.id.field_description);
+        fieldAmount = findViewById(R.id.field_amount);
+
+        String transactionId = "TID" + System.currentTimeMillis();
+        fieldTransactionId.setText(transactionId);
+        fieldTransactionRefId.setText(transactionId);
+
+        radioAppChoice = findViewById(R.id.radioAppChoice);
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    private void pay() {
+        String payeeVpa = fieldPayeeVpa.getText().toString();
+        String payeeName = fieldPayeeName.getText().toString();
+        String payeeMerchantCode = fieldPayeeMerchantCode.getText().toString();
+        String transactionId = fieldTransactionId.getText().toString();
+        String transactionRefId = fieldTransactionRefId.getText().toString();
+        String description = fieldDescription.getText().toString();
+        String amount = fieldAmount.getText().toString();
+        RadioButton paymentAppChoice = findViewById(radioAppChoice.getCheckedRadioButtonId());
+
+        PaymentApp paymentApp;
+
+        switch (paymentAppChoice.getId()) {
+            case R.id.app_default:
+                paymentApp = PaymentApp.PAYTM;
+                break;
+            case R.id.app_amazonpay:
+                paymentApp = PaymentApp.AMAZON_PAY;
+                break;
+            case R.id.app_bhim_upi:
+                paymentApp = PaymentApp.BHIM_UPI;
+                break;
+            case R.id.app_google_pay:
+                paymentApp = PaymentApp.GOOGLE_PAY;
+                break;
+            case R.id.app_phonepe:
+                paymentApp = PaymentApp.PHONE_PE;
+                break;
+            case R.id.app_paytm:
+                paymentApp = PaymentApp.PAYTM;
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + paymentAppChoice.getId());
+        }
+
+
+        // START PAYMENT INITIALIZATION
+        EasyUpiPayment.Builder builder = new EasyUpiPayment.Builder()
+                .with(this)
+                .setPayeeVpa(payeeVpa)
+                .setPayeeName(payeeName)
+                .setTransactionId(transactionId)
+                .setTransactionRefId(transactionRefId)
+                .setPayeeMerchantCode(payeeMerchantCode)
+                .setDescription(description)
+                .setAmount(amount);
+        // END INITIALIZATION
+
+        try {
+            // Build instance
+            easyUpiPayment = builder.build();
+
+            // Register Listener for Events
+            easyUpiPayment.setPaymentStatusListener(this);
+
+            // Start payment / transaction
+            easyUpiPayment.startPayment();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            toast("Error: " + exception.getMessage());
         }
     }
 
+    @Override
+    public void onTransactionCompleted(TransactionDetails transactionDetails) {
+        // Transaction Completed
+        Log.d("TransactionDetails", transactionDetails.toString());
+        statusView.setText(transactionDetails.toString());
+    }
+
+    @Override
+    public void onTransactionCancelled() {
+        // Payment Cancelled by User
+        toast("Cancelled by user");
+        imageView.setImageResource(R.drawable.ic_failed);
+    }
+
+    @Override
+    public void onAppNotFound() {
+        toast("App Not Found");
+        imageView.setImageResource(R.drawable.ic_failed);
+    }
+
+    @Override
+    public void onTransactionSuccess() {
+        // Payment Success
+        toast("Success");
+        imageView.setImageResource(R.drawable.ic_success);
+    }
+
+    @Override
+    public void onTransactionSubmitted() {
+        // Payment Pending
+        toast("Pending | Submitted");
+        imageView.setImageResource(R.drawable.ic_success);
+    }
+
+    @Override
+    public void onTransactionFailed() {
+        // Payment Failed
+        toast("Failed");
+        imageView.setImageResource(R.drawable.ic_failed);
+    }
+
+    private void toast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+
+//    Uncomment this if you have inherited [android.app.Activity] and not [androidx.appcompat.app.AppCompatActivity]
+//
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        easyUpiPayment.removePaymentStatusListener();
+//    }
 }
